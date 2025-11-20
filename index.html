@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI JobApply Pro - Intelligent Job Application Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --danger: #e63946;
+            --warning: #fca311;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 100px 0;
+            border-radius: 0 0 30px 30px;
+        }
+        
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            margin-bottom: 30px;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .ai-badge {
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .login-card {
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: none;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-robot text-primary me-2"></i>
+                AI JobApply <span class="text-primary">Pro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Pricing</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-primary me-2" onclick="showLogin()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegister()">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Let AI Power Your Job Search</h1>
+                    <p class="lead mb-4">Our intelligent agents research companies, customize your resume, and apply to jobs automatically. Get more interviews with less effort.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <button class="btn btn-light btn-lg" onclick="showRegister()">
+                            <i class="fas fa-rocket me-2"></i>Start Free Trial
+                        </button>
+                        <button class="btn btn-outline-light btn-lg" onclick="scrollToSection('features')">
+                            <i class="fas fa-play-circle me-2"></i>See How It Works
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="AI Job Application" class="img-fluid rounded-3 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">AI-Powered Job Application Features</h2>
+                <p class="lead">Our synthetic intelligence system handles the entire job search process</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card card p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>Smart Job Research</h4>
+                        <p>Our AI researches companies, analyzes job descriptions, and identifies the best opportunities for you.</p>
+                        <span class="ai-badge">AI Powered</span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card card p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h4>Resume Customization</h4>
+                        <p>AI tailors your resume for each application, highlighting relevant skills and experience.</p>
+                        <span class="ai-badge">AI Powered</span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card card p-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h4>Auto Application</h4>
+                        <p>Our system automatically applies to jobs across multiple platforms with optimized timing.</p>
+                        <span class="ai-badge">AI Powered</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">How Our AI Job Application System Works</h2>
+                <p class="lead">Four simple steps to land your dream job</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 mb-0">1</span>
+                        </div>
+                        <h4>Upload Your Resume</h4>
+                        <p>Upload your existing resume or use our AI resume builder to create a professional one.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 mb-0">2</span>
+                        </div>
+                        <h4>Set Preferences</h4>
+                        <p>Tell us your job preferences, skills, and target companies or let AI suggest opportunities.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 mb-0">3</span>
+                        </div>
+                        <h4>AI Applies for You</h4>
+                        <p>Our AI agents research, customize applications, and apply to relevant jobs automatically.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 mb-0">4</span>
+                        </div>
+                        <h4>Track & Interview</h4>
+                        <p>Monitor applications, receive interview invites, and use AI to prepare for interviews.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button class="btn btn-primary btn-lg" onclick="showRegister()">
+                    <i class="fas fa-magic me-2"></i>Start Your AI Job Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Simple, Transparent Pricing</h2>
+                <p class="lead">Choose the plan that works for you</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <h5 class="card-title">Starter</h5>
+                            <div class="my-4">
+                                <span class="h1 fw-bold">$29</span>
+                                <span class="text-muted">/month</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>10 AI applications per month</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Basic resume builder</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Application tracking</li>
+                                <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>AI interview prep</li>
+                                <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>Priority support</li>
+                            </ul>
+                            <button class="btn btn-outline-primary w-100" onclick="showRegister()">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body text-center p-4">
+                            <span class="badge bg-primary position-absolute top-0 start-50 translate-middle px-3 py-2">Most Popular</span>
+                            <h5 class="card-title">Professional</h5>
+                            <div class="my-4">
+                                <span class="h1 fw-bold">$79</span>
+                                <span class="text-muted">/month</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>50 AI applications per month</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Advanced AI resume builder</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Application tracking</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>AI interview prep</li>
+                                <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>Priority support</li>
+                            </ul>
+                            <button class="btn btn-primary w-100" onclick="showRegister()">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4">
+                            <h5 class="card-title">Enterprise</h5>
+                            <div class="my-4">
+                                <span class="h1 fw-bold">$149</span>
+                                <span class="text-muted">/month</span>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Unlimited AI applications</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Advanced AI resume builder</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Application tracking</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>AI interview prep</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Priority support</li>
+                            </ul>
+                            <button class="btn btn-outline-primary w-100" onclick="showRegister()">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Enter your password">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login to Dashboard</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-decoration-none">Forgot your password?</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Don't have an account? <a href="#" class="text-decoration-none" onclick="showRegister()">Sign up</a></p>
+                    </div>
+                    
+                    <!-- Demo Credentials -->
+                    <div class="alert alert-info mt-3">
+                        <h6>Demo Credentials:</h6>
+                        <p class="mb-1"><strong>Email:</strong> admin@aijobapply.com</p>
+                        <p class="mb-0"><strong>Password:</strong> admin123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" placeholder="John">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Doe">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" placeholder="john@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Create a password">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" placeholder="Confirm your password">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="agreeTerms">
+                            <label class="form-check-label" for="agreeTerms">I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a></label>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Create Account</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Already have an account? <a href="#" class="text-decoration-none" onclick="showLogin()">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>AI JobApply Pro</h5>
+                    <p>The intelligent job application platform that uses AI to land you more interviews and better job offers.</p>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Product</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#features" class="text-white text-decoration-none">Features</a></li>
+                        <li><a href="#pricing" class="text-white text-decoration-none">Pricing</a></li>
+                        <li><a href="#how-it-works" class="text-white text-decoration-none">How It Works</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Company</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Careers</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Blog</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>Subscribe to our newsletter</h5>
+                    <p>Monthly digest of what's new and exciting from us.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Email address">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 AI JobApply Pro. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-white text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show login modal
+        function showLogin() {
+            const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+            if (registerModal) registerModal.hide();
+            
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+        }
+        
+        // Show register modal
+        function showRegister() {
+            const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+            if (loginModal) loginModal.hide();
+            
+            const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            registerModal.show();
+        }
+        
+        // Scroll to section
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Form submission handlers
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            // Simple authentication
+            if ((email === 'admin@aijobapply.com' && password === 'admin123') || 
+                (email === 'demo@aijobapply.com' && password === 'demo123')) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Invalid credentials. Use admin@aijobapply.com / admin123');
+            }
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Account created successfully! Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+        });
+        
+        // Demo auto-fill for login
+        document.querySelector('#loginForm input[type="email"]').addEventListener('focus', function() {
+            this.value = 'admin@aijobapply.com';
+        });
+        
+        document.querySelector('#loginForm input[type="password"]').addEventListener('focus', function() {
+            this.value = 'admin123';
+        });
+    </script>
+</body>
+</html>
