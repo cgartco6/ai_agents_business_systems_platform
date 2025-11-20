@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  ai-platform:
+    build: .
+    ports:
+      - "443:443"
+      - "80:80"
+    environment:
+      - ENVIRONMENT=production
+      - MASTER_ENCRYPTION_KEY=${MASTER_ENCRYPTION_KEY}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - postgres
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  celery-worker:
+    build: .
+    command: celery -A src.tasks worker --loglevel=info
+    depends_on:
+      - redis
+      - ai-platform
+
+  celery-beat:
+    build: .
+    command: celery -A src.tasks beat --loglevel=info
+    depends_on:
+      - redis
+      - ai-platform
+
+volumes:
+  redis_data:
+  postgres_data:
