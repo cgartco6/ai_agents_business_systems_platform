@@ -1,0 +1,35 @@
+payment_system:
+  distribution:
+    owner_fnb: 0.40
+    african_bank: 0.15
+    reserve_fnb: 0.20
+    ai_fnb: 0.20
+    # 5% automatically remains for growth
+  
+  gateways:
+    fnb:
+      api_key: ${FNB_API_KEY}
+      account_number: ${FNB_ACCOUNT}
+      branch_code: ${FNB_BRANCH}
+    
+    african_bank:
+      api_key: ${AFRICAN_BANK_API_KEY}
+      account_number: ${AFRICAN_BANK_ACCOUNT}
+    
+    payfast:
+      merchant_id: ${PAYFAST_MERCHANT_ID}
+      merchant_key: ${PAYFAST_MERCHANT_KEY}
+    
+    stripe:
+      secret_key: ${STRIPE_SECRET_KEY}
+      publishable_key: ${STRIPE_PUBLISHABLE_KEY}
+    
+    crypto:
+      btc_wallet: ${BTC_WALLET}
+      eth_wallet: ${ETH_WALLET}
+      usdt_wallet: ${USDT_WALLET}
+  
+  payout_schedule:
+    day_of_week: "friday"  # Weekly on Friday
+    time: "09:00"  # 9 AM
+    timezone: "Africa/Johannesburg"
