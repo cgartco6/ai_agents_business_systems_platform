@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI JobApply Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --danger: #e63946;
+            --warning: #fca311;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--dark) 0%, #2c3e50 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 0;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .dashboard-card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border: none;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-applied {
+            background-color: #e9f7ff;
+            color: var(--primary);
+        }
+        
+        .status-interview {
+            background-color: #fff4e6;
+            color: var(--warning);
+        }
+        
+        .status-offer {
+            background-color: #e6f4ea;
+            color: #34a853;
+        }
+        
+        .status-rejected {
+            background-color: #fce8e6;
+            color: var(--danger);
+        }
+        
+        .resume-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .preview-resume {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 400px;
+        }
+        
+        .resume-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .skill-badge {
+            background-color: #e9f7ff;
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .ai-suggestion {
+            background-color: #f0f7ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+        
+        .job-card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .application-tracker {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .ai-badge {
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            background-color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+                width: 100%;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 col-md-3 sidebar d-md-block">
+                <div class="d-flex flex-column p-3">
+                    <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <i class="fas fa-robot me-2"></i>
+                        <span class="fs-5">AI JobApply</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#resume-builder" class="nav-link" onclick="showSection('resume-builder')">
+                                <i class="fas fa-file-alt"></i>
+                                Resume Builder
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#job-search" class="nav-link" onclick="showSection('job-search')">
+                                <i class="fas fa-search"></i>
+                                Job Search
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#applications" class="nav-link" onclick="showSection('applications')">
+                                <i class="fas fa-paper-plane"></i>
+                                Applications
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ai-agents" class="nav-link" onclick="showSection('ai-agents')">
+                                <i class="fas fa-robot"></i>
+                                AI Agents
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings" class="nav-link" onclick="showSection('settings')">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=4361ee&color=fff" alt="User" class="user-avatar me-2">
+                            <strong>Admin User</strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10 col-md-9 main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="showSection('job-search')">
+                                <i class="fas fa-plus me-1"></i> Find Jobs
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card text-center rounded-3">
+                                <h3 class="fw-bold" id="applicationsCount">24</h3>
+                                <p>Applications Sent</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card text-center rounded-3" style="background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);">
+                                <h3 class="fw-bold" id="interviewsCount">5</h3>
+                                <p>Interviews</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card text-center rounded-3" style="background: linear-gradient(135deg, #fca311 0%, #e63946 100%);">
+                                <h3 class="fw-bold" id="offersCount">2</h3>
+                                <p>Offers</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card text-center rounded-3" style="background: linear-gradient(135deg, #3a0ca3 0%, #7209b7 100%);">
+                                <h3 class="fw-bold" id="successRate">78%</h3>
+                                <p>Success Rate</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Recent Applications -->
+                        <div class="col-lg-8">
+                            <div class="dashboard-card card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">Recent Applications</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Company</th>
+                                                    <th>Position</th>
+                                                    <th>Date Applied</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="applicationsTable">
+                                                <!-- Applications will be populated by JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Recommendations -->
+                        <div class="col-lg-4">
+                            <div class="dashboard-card card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fas fa-robot text-primary me-2"></i>AI Recommendations
+                                    </h5>
+                                    <div class="ai-suggestion">
+                                        <h6>Resume Enhancement</h6>
+                                        <p class="small mb-0">Add 3 more projects to increase match rate by 15%</p>
+                                    </div>
+                                    <div class="ai-suggestion">
+                                        <h6>Skill Development</h6>
+                                        <p class="small mb-0">Learn React.js to qualify for 42% more frontend roles</p>
+                                    </div>
+                                    <div class="ai-suggestion">
+                                        <h6>Application Strategy</h6>
+                                        <p class="small mb-0">Apply between 9-11 AM for 23% higher response rate</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions -->
+                            <div class="dashboard-card card mt-4">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">Quick Actions</h5>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary" onclick="showSection('resume-builder')">
+                                            <i class="fas fa-file-alt me-2"></i>Update Resume
+                                        </button>
+                                        <button class="btn btn-outline-primary" onclick="showSection('job-search')">
+                                            <i class="fas fa-search me-2"></i>Find New Jobs
+                                        </button>
+                                        <button class="btn btn-outline-primary" onclick="showSection('ai-agents')">
+                                            <i class="fas fa-robot me-2"></i>Configure AI Agents
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Resume Builder Section -->
+                <section id="resume-builder" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">AI Resume Builder</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="generateResume()">
+                                <i class="fas fa-magic me-1"></i> Generate with AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="resume-section">
+                                <h4 class="mb-4">Build Your Resume</h4>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Upload Your Photo (Optional)</label>
+                                    <div class="border rounded p-4 text-center">
+                                        <img id="profilePreview" src="https://ui-avatars.com/api/?name=Admin+User&background=4361ee&color=fff&size=100" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                                        <p class="text-muted">Professional headshot recommended</p>
+                                        <input type="file" id="photoUpload" class="d-none" accept="image/*">
+                                        <button class="btn btn-outline-primary" onclick="document.getElementById('photoUpload').click()">
+                                            <i class="fas fa-upload me-2"></i>Upload Photo
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="fullName" placeholder="John Doe" value="Admin User">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Professional Title</label>
+                                        <input type="text" class="form-control" id="jobTitle" placeholder="Senior AI Engineer" value="Senior AI Engineer">
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" placeholder="john@example.com" value="admin@aijobapply.com">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" id="phone" placeholder="(123) 456-7890" value="(123) 456-7890">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Professional Summary</label>
+                                    <textarea class="form-control" id="summary" rows="3" placeholder="Experienced AI engineer with 5+ years in machine learning...">Experienced AI engineer with 5+ years in machine learning and deep learning. Specialized in developing and deploying AI solutions for various industries. Strong background in Python, TensorFlow, and cloud technologies.</textarea>
+                                    <div class="form-text">Let AI enhance your summary <a href="#" class="text-primary" onclick="enhanceSummary()">Use AI Assistant</a></div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Skills</label>
+                                    <div class="border rounded p-3" id="skillsContainer">
+                                        <!-- Skills will be populated by JavaScript -->
+                                    </div>
+                                    <div class="input-group mt-2">
+                                        <input type="text" class="form-control" id="newSkill" placeholder="Add a new skill">
+                                        <button class="btn btn-outline-primary" type="button" onclick="addSkill()">Add Skill</button>
+                                    </div>
+                                    <div class="form-text">AI suggests skills based on your target jobs <a href="#" class="text-primary" onclick="suggestSkills()">Get AI Suggestions</a></div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Work Experience</label>
+                                    <div id="experienceContainer">
+                                        <!-- Experience items will be populated by JavaScript -->
+                                    </div>
+                                    <button class="btn btn-outline-primary mt-2" onclick="addExperience()">+ Add Experience</button>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Education</label>
+                                    <div id="educationContainer">
+                                        <!-- Education items will be populated by JavaScript -->
+                                    </div>
+                                    <button class="btn btn-outline-primary mt-2" onclick="addEducation()">+ Add Education</button>
+                                </div>
+                                
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" onclick="saveResume()">
+                                        <i class="fas fa-save me-1"></i> Save Resume
+                                    </button>
+                                    <button class="btn btn-success" onclick="downloadResume()">
+                                        <i class="fas fa-download me-1"></i> Download PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="preview-resume">
+                                <h4 class="text-center mb-4">Resume Preview</h4>
+                                <div class="resume-header text-center">
+                                    <h3 id="previewName">Admin User</h3>
+                                    <p class="mb-1" id="previewTitle">Senior AI Engineer</p>
+                                    <p class="text-muted small" id="previewContact">admin@aijobapply.com | (123) 456-7890 | San Francisco, CA</p>
+                                </div>
+                                
+                                <h5 class="border-bottom pb-2">Professional Summary</h5>
+                                <p class="small" id="previewSummary">Experienced AI engineer with 5+ years in machine learning and deep learning. Specialized in developing and deploying AI solutions for various industries. Strong background in Python, TensorFlow, and cloud technologies.</p>
+                                
+                                <h5 class="border-bottom pb-2 mt-4">Skills</h5>
+                                <div id="previewSkills">
+                                    <!-- Skills preview will be populated by JavaScript -->
+                                </div>
+                                
+                                <h5 class="border-bottom pb-2 mt-4">Experience</h5>
+                                <div id="previewExperience">
+                                    <!-- Experience preview will be populated by JavaScript -->
+                                </div>
+                                
+                                <h5 class="border-bottom pb-2 mt-4">Education</h5>
+                                <div id="previewEducation">
+                                    <!-- Education preview will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="ai-suggestion mt-4">
+                                <h6><i class="fas fa-robot me-2 text-primary"></i>AI Suggestion</h6>
+                                <p class="small mb-0" id="aiSuggestion">Based on your target jobs, we suggest adding experience with PyTorch and cloud platforms like AWS to increase match rate by 23%.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Job Search Section -->
+                <section id="job-search" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">AI Job Search</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="startAIJobSearch()">
+                                <i class="fas fa-robot me-1"></i> Start AI Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Search Filters</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Job Title</label>
+                                            <input type="text" class="form-control" id="jobTitleFilter" placeholder="e.g. AI Engineer, Data Scientist">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Location</label>
+                                            <input type="text" class="form-control" id="locationFilter" placeholder="e.g. Remote, San Francisco">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Skills</label>
+                                            <input type="text" class="form-control" id="skillsFilter" placeholder="e.g. Python, Machine Learning">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Salary Range</label>
+                                            <select class="form-select" id="salaryFilter">
+                                                <option value="">Any</option>
+                                                <option value="50000-80000">$50,000 - $80,000</option>
+                                                <option value="80000-120000">$80,000 - $120,000</option>
+                                                <option value="120000+">$120,000+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="searchJobs()">
+                                        <i class="fas fa-search me-1"></i> Search Jobs
+                                    </button>
+                                    <button class="btn btn-outline-primary ms-2" onclick="aiRecommendJobs()">
+                                        <i class="fas fa-robot me-1"></i> AI Recommendations
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">AI Search Status</h5>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Job Matching</span>
+                                            <span>85%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 85%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Resume Optimization</span>
+                                            <span>92%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 92%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Application Success</span>
+                                            <span>78%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 78%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="autoApply" checked>
+                                        <label class="form-check-label" for="autoApply">Auto-apply to matching jobs</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="jobResults">
+                        <!-- Job results will be populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Applications Section -->
+                <section id="applications" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Application Tracker</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <button class="btn btn-outline-primary" onclick="exportApplications()">
+                                    <i class="fas fa-download me-1"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="application-tracker">
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="text-primary" id="totalApplications">24</h3>
+                                        <p class="mb-0">Total Applications</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="text-warning" id="pendingApplications">12</h3>
+                                        <p class="mb-0">Pending</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="text-success" id="interviewApplications">5</h3>
+                                        <p class="mb-0">Interviews</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="text-danger" id="rejectedApplications">3</h3>
+                                        <p class="mb-0">Rejected</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Position</th>
+                                        <th>Date Applied</th>
+                                        <th>Status</th>
+                                        <th>AI Score</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="applicationsList">
+                                    <!-- Applications will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Agents Section -->
+                <section id="ai-agents" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">AI Agents Configuration</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="activateAllAgents()">
+                                <i class="fas fa-play me-1"></i> Activate All Agents
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Research Agent</h5>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="researchAgent" checked>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">Researches companies, analyzes job descriptions, and identifies the best opportunities.</p>
+                                    <div class="mb-3">
+                                        <label class="form-label">Research Depth</label>
+                                        <select class="form-select" id="researchDepth">
+                                            <option value="basic">Basic</option>
+                                            <option value="standard" selected>Standard</option>
+                                            <option value="deep">Deep Research</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-outline-primary" onclick="testAgent('research')">
+                                        <i class="fas fa-test me-1"></i> Test Agent
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Application Agent</h5>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="applicationAgent" checked>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">Automatically applies to jobs with customized resumes and cover letters.</p>
+                                    <div class="mb-3">
+                                        <label class="form-label">Applications Per Day</label>
+                                        <input type="number" class="form-control" id="appsPerDay" value="10" min="1" max="50">
+                                    </div>
+                                    <button class="btn btn-outline-primary" onclick="testAgent('application')">
+                                        <i class="fas fa-test me-1"></i> Test Agent
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Follow-up Agent</h5>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="followupAgent" checked>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">Sends personalized follow-up messages to increase response rates.</p>
+                                    <div class="mb-3">
+                                        <label class="form-label">Follow-up Delay (days)</label>
+                                        <input type="number" class="form-control" id="followupDelay" value="7" min="1" max="30">
+                                    </div>
+                                    <button class="btn btn-outline-primary" onclick="testAgent('followup')">
+                                        <i class="fas fa-test me-1"></i> Test Agent
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Interview Prep Agent</h5>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="interviewAgent" checked>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">Generates personalized interview questions and preparation materials.</p>
+                                    <div class="mb-3">
+                                        <label class="form-label">Preparation Depth</label>
+                                        <select class="form-select" id="prepDepth">
+                                            <option value="basic">Basic</option>
+                                            <option value="comprehensive" selected>Comprehensive</option>
+                                            <option value="intensive">Intensive</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-outline-primary" onclick="testAgent('interview')">
+                                        <i class="fas fa-test me-1"></i> Test Agent
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">AI Agent Analytics</h5>
+                            <div class="row text-center">
+                                <div class="col-md-3 mb-3">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-primary" id="jobsResearched">142</h3>
+                                        <p class="mb-0">Jobs Researched</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-success" id="appsSubmitted">24</h3>
+                                        <p class="mb-0">Applications Submitted</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-warning" id="followupsSent">18</h3>
+                                        <p class="mb-0">Follow-ups Sent</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-info" id="interviewsPrepared">5</h3>
+                                        <p class="mb-0">Interviews Prepared</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Settings</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="saveSettings()">
+                                <i class="fas fa-save me-1"></i> Save Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Profile Settings</h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" value="Admin User">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" value="admin@aijobapply.com">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" value="(123) 456-7890">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" value="San Francisco, CA">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Job Preferences</label>
+                                        <textarea class="form-control" rows="3" placeholder="Describe your ideal job...">Senior AI Engineer role with focus on machine learning and deep learning. Prefer remote work or San Francisco Bay Area.</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">AI Settings</h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">AI Model</label>
+                                        <select class="form-select">
+                                            <option>GPT-4 Turbo</option>
+                                            <option selected>Claude 3 Sonnet</option>
+                                            <option>Gemini Pro</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Customization Level</label>
+                                        <select class="form-select">
+                                            <option>Basic</option>
+                                            <option selected>Advanced</option>
+                                            <option>Maximum</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Daily Application Limit</label>
+                                        <input type="number" class="form-control" value="10" min="1" max="50">
+                                    </div>
+                                    
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="autoApplySettings" checked>
+                                        <label class="form-check-label" for="autoApplySettings">Enable auto-apply</label>
+                                    </div>
+                                    
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="followupSettings" checked>
+                                        <label class="form-check-label" for="followupSettings">Enable auto-followup</label>
+                                    </div>
+                                    
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="aiSuggestions" checked>
+                                        <label class="form-check-label" for="aiSuggestions">Show AI suggestions</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card dashboard-card mt-4">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Account Settings</h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Current Plan</label>
+                                        <div class="alert alert-primary">
+                                            <strong>Professional Plan</strong> - $79/month
+                                            <a href="#" class="float-end">Upgrade</a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Billing Information</label>
+                                        <p class="text-muted">**** **** **** 4242 - Expires 12/2024</p>
+                                        <a href="#" class="btn btn-outline-primary btn-sm">Update Payment</a>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-danger" onclick="logout()">
+                                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data for the dashboard
+        const sampleApplications = [
+            { id: 1, company: "Google", position: "AI Research Scientist", date: "2023-06-12", status: "interview", aiScore: 92 },
+            { id: 2, company: "Microsoft", position: "Machine Learning Engineer", date: "2023-06-10", status: "applied", aiScore: 87 },
+            { id: 3, company: "OpenAI", position: "AI Product Manager", date: "2023-06-08", status: "offer", aiScore: 95 },
+            { id: 4, company: "Amazon", position: "Data Scientist", date: "2023-06-05", status: "rejected", aiScore: 76 },
+            { id: 5, company: "Meta", position: "AI Software Engineer", date: "2023-06-03", status: "applied", aiScore: 89 }
+        ];
+
+        const sampleJobs = [
+            { id: 1, company: "Netflix", position: "Senior ML Engineer", location: "Los Gatos, CA", salary: "$180,000 - $220,000", match: 94 },
+            { id: 2, company: "Tesla", position: "Autopilot AI Engineer", location: "Palo Alto, CA", salary: "$160,000 - $200,000", match: 88 },
+            { id: 3, company: "Apple", position: "AI Research Scientist", location: "Cupertino, CA", salary: "$190,000 - $240,000", match: 91 },
+            { id: 4, company: "NVIDIA", position: "Deep Learning Engineer", location: "Santa Clara, CA", salary: "$150,000 - $190,000", match: 85 },
+            { id: 5, company: "LinkedIn", position: "AI Product Manager", location: "Sunnyvale, CA", salary: "$140,000 - $180,000", match: 82 }
+        ];
+
+        const sampleSkills = ["Python", "Machine Learning", "TensorFlow", "Data Analysis", "AWS", "SQL", "PyTorch", "Deep Learning"];
+        const sampleExperience = [
+            { id: 1, title: "Senior AI Engineer", company: "Tech Solutions Inc.", period: "Jan 2020 - Present", description: "Led machine learning initiatives and developed AI models for various clients." },
+            { id: 2, title: "AI Engineer", company: "Data Systems Corp.", period: "Mar 2018 - Dec 2019", description: "Developed and deployed machine learning models for predictive analytics." }
+        ];
+        const sampleEducation = [
+            { id: 1, degree: "MSc in Computer Science", school: "Stanford University", period: "2015 - 2017" },
+            { id: 2, degree: "BSc in Computer Engineering", school: "UC Berkeley", period: "2011 - 2015" }
+        ];
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            loadResumeBuilder();
+            loadJobSearch();
+            loadApplications();
+        });
+
+        // Navigation functions
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Update active nav link
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
+        }
+
+        // Dashboard functions
+        function loadDashboardData() {
+            // Update stats
+            document.getElementById('applicationsCount').textContent = sampleApplications.length;
+            document.getElementById('interviewsCount').textContent = sampleApplications.filter(app => app.status === 'interview').length;
+            document.getElementById('offersCount').textContent = sampleApplications.filter(app => app.status === 'offer').length;
+            
+            // Populate applications table
+            const applicationsTable = document.getElementById('applicationsTable');
+            applicationsTable.innerHTML = '';
+            
+            sampleApplications.forEach(app => {
+                const statusClass = `status-${app.status}`;
+                const statusText = app.status.charAt(0).toUpperCase() + app.status.slice(1);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${app.company}</td>
+                    <td>${app.position}</td>
+                    <td>${app.date}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary">Track</button>
+                    </td>
+                `;
+                applicationsTable.appendChild(row);
+            });
+        }
+
+        // Resume Builder functions
+        function loadResumeBuilder() {
+            // Load skills
+            const skillsContainer = document.getElementById('skillsContainer');
+            skillsContainer.innerHTML = '';
+            sampleSkills.forEach(skill => {
+                const skillBadge = document.createElement('div');
+                skillBadge.className = 'skill-badge d-inline-block';
+                skillBadge.innerHTML = `${skill} <i class="fas fa-times ms-1" onclick="removeSkill('${skill}')"></i>`;
+                skillsContainer.appendChild(skillBadge);
+            });
+            
+            // Load skills preview
+            const previewSkills = document.getElementById('previewSkills');
+            previewSkills.innerHTML = '';
+            sampleSkills.forEach(skill => {
+                const skillBadge = document.createElement('span');
+                skillBadge.className = 'skill-badge';
+                skillBadge.textContent = skill;
+                previewSkills.appendChild(skillBadge);
+            });
+            
+            // Load experience
+            const experienceContainer = document.getElementById('experienceContainer');
+            experienceContainer.innerHTML = '';
+            sampleExperience.forEach(exp => {
+                const expItem = document.createElement('div');
+                expItem.className = 'border rounded p-3 mb-3';
+                expItem.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">${exp.title} at ${exp.company}</h6>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience(${exp.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeExperience(${exp.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-1">${exp.period}</p>
+                    <p class="mb-0">${exp.description}</p>
+                `;
+                experienceContainer.appendChild(expItem);
+            });
+            
+            // Load experience preview
+            const previewExperience = document.getElementById('previewExperience');
+            previewExperience.innerHTML = '';
+            sampleExperience.forEach(exp => {
+                const expItem = document.createElement('div');
+                expItem.className = 'mb-3';
+                expItem.innerHTML = `
+                    <h6 class="mb-0">${exp.title}</h6>
+                    <p class="mb-0 text-muted small">${exp.company} | ${exp.period}</p>
+                    <p class="small mb-0">${exp.description}</p>
+                `;
+                previewExperience.appendChild(expItem);
+            });
+            
+            // Load education
+            const educationContainer = document.getElementById('educationContainer');
+            educationContainer.innerHTML = '';
+            sampleEducation.forEach(edu => {
+                const eduItem = document.createElement('div');
+                eduItem.className = 'border rounded p-3 mb-3';
+                eduItem.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">${edu.degree}</h6>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation(${edu.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeEducation(${edu.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-0">${edu.school} | ${edu.period}</p>
+                `;
+                educationContainer.appendChild(eduItem);
+            });
+            
+            // Load education preview
+            const previewEducation = document.getElementById('previewEducation');
+            previewEducation.innerHTML = '';
+            sampleEducation.forEach(edu => {
+                const eduItem = document.createElement('div');
+                eduItem.innerHTML = `
+                    <h6 class="mb-0">${edu.degree}</h6>
+                    <p class="mb-0 text-muted small">${edu.school} | ${edu.period}</p>
+                `;
+                previewEducation.appendChild(eduItem);
+            });
+            
+            // Set up photo upload
+            document.getElementById('photoUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('profilePreview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Set up real-time preview updates
+            document.getElementById('fullName').addEventListener('input', function() {
+                document.getElementById('previewName').textContent = this.value;
+            });
+            
+            document.getElementById('jobTitle').addEventListener('input', function() {
+                document.getElementById('previewTitle').textContent = this.value;
+            });
+            
+            document.getElementById('email').addEventListener('input', updateContactPreview);
+            document.getElementById('phone').addEventListener('input', updateContactPreview);
+            
+            document.getElementById('summary').addEventListener('input', function() {
+                document.getElementById('previewSummary').textContent = this.value;
+            });
+        }
+        
+        function updateContactPreview() {
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            document.getElementById('previewContact').textContent = `${email} | ${phone} | San Francisco, CA`;
+        }
+        
+        function addSkill() {
+            const newSkillInput = document.getElementById('newSkill');
+            const skill = newSkillInput.value.trim();
+            
+            if (skill && !sampleSkills.includes(skill)) {
+                sampleSkills.push(skill);
+                loadResumeBuilder(); // Reload to update the display
+                newSkillInput.value = '';
+            }
+        }
+        
+        function removeSkill(skill) {
+            const index = sampleSkills.indexOf(skill);
+            if (index > -1) {
+                sampleSkills.splice(index, 1);
+                loadResumeBuilder(); // Reload to update the display
+            }
+        }
+        
+        function addExperience() {
+            const newId = sampleExperience.length > 0 ? Math.max(...sampleExperience.map(e => e.id)) + 1 : 1;
+            sampleExperience.push({
+                id: newId,
+                title: "New Position",
+                company: "New Company",
+                period: "YYYY - YYYY",
+                description: "Description of your role and achievements."
+            });
+            loadResumeBuilder();
+        }
+        
+        function removeExperience(id) {
+            const index = sampleExperience.findIndex(exp => exp.id === id);
+            if (index > -1) {
+                sampleExperience.splice(index, 1);
+                loadResumeBuilder();
+            }
+        }
+        
+        function editExperience(id) {
+            const exp = sampleExperience.find(exp => exp.id === id);
+            if (exp) {
+                exp.title = prompt("Enter job title:", exp.title) || exp.title;
+                exp.company = prompt("Enter company name:", exp.company) || exp.company;
+                exp.period = prompt("Enter employment period:", exp.period) || exp.period;
+                exp.description = prompt("Enter job description:", exp.description) || exp.description;
+                loadResumeBuilder();
+            }
+        }
+        
+        function addEducation() {
+            const newId = sampleEducation.length > 0 ? Math.max(...sampleEducation.map(e => e.id)) + 1 : 1;
+            sampleEducation.push({
+                id: newId,
+                degree: "New Degree",
+                school: "New School",
+                period: "YYYY - YYYY"
+            });
+            loadResumeBuilder();
+        }
+        
+        function removeEducation(id) {
+            const index = sampleEducation.findIndex(edu => edu.id === id);
+            if (index > -1) {
+                sampleEducation.splice(index, 1);
+                loadResumeBuilder();
+            }
+        }
+        
+        function editEducation(id) {
+            const edu = sampleEducation.find(edu => edu.id === id);
+            if (edu) {
+                edu.degree = prompt("Enter degree:", edu.degree) || edu.degree;
+                edu.school = prompt("Enter school name:", edu.school) || edu.school;
+                edu.period = prompt("Enter education period:", edu.period) || edu.period;
+                loadResumeBuilder();
+            }
+        }
+        
+        function generateResume() {
+            alert("AI is generating an optimized resume based on your profile and target jobs...");
+            // In a real application, this would call the backend AI service
+            document.getElementById('aiSuggestion').textContent = "AI has optimized your resume! We've highlighted your machine learning experience and added relevant keywords for AI engineering roles.";
+        }
+        
+        function enhanceSummary() {
+            const currentSummary = document.getElementById('summary').value;
+            // Simulate AI enhancement
+            const enhancedSummary = currentSummary + " Proven track record of delivering AI solutions that improve efficiency by 30%+. Excellent problem-solving skills and ability to work in cross-functional teams.";
+            document.getElementById('summary').value = enhancedSummary;
+            document.getElementById('previewSummary').textContent = enhancedSummary;
+            alert("AI has enhanced your professional summary!");
+        }
+        
+        function suggestSkills() {
+            // Simulate AI skill suggestions
+            const suggestedSkills = ["Docker", "Kubernetes", "CI/CD", "Agile Methodology", "Natural Language Processing"];
+            if (confirm(`AI suggests adding these skills: ${suggestedSkills.join(', ')}. Add them to your resume?`)) {
+                suggestedSkills.forEach(skill => {
+                    if (!sampleSkills.includes(skill)) {
+                        sampleSkills.push(skill);
+                    }
+                });
+                loadResumeBuilder();
+            }
+        }
+        
+        function saveResume() {
+            alert("Resume saved successfully!");
+        }
+        
+        function downloadResume() {
+            alert("Preparing PDF download...");
+            // In a real application, this would generate and download a PDF
+        }
+
+        // Job Search functions
+        function loadJobSearch() {
+            // This would typically load from an API
+        }
+        
+        function searchJobs() {
+            const jobTitle = document.getElementById('jobTitleFilter').value;
+            const location = document.getElementById('locationFilter').value;
+            const skills = document.getElementById('skillsFilter').value;
+            const salary = document.getElementById('salaryFilter').value;
+            
+            alert(`Searching for jobs with filters:\nTitle: ${jobTitle}\nLocation: ${location}\nSkills: ${skills}\nSalary: ${salary}`);
+            
+            // In a real application, this would call a backend API
+            displayJobResults(sampleJobs);
+        }
+        
+        function aiRecommendJobs() {
+            alert("AI is analyzing your profile and finding the best job matches...");
+            // In a real application, this would call the AI recommendation engine
+            displayJobResults(sampleJobs.filter(job => job.match > 85));
+        }
+        
+        function startAIJobSearch() {
+            alert("AI Job Search activated! Our agents will now automatically search and apply to matching jobs.");
+            // In a real application, this would start the AI job search process
+        }
+        
+        function displayJobResults(jobs) {
+            const jobResults = document.getElementById('jobResults');
+            jobResults.innerHTML = '';
+            
+            jobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'col-md-6 col-lg-4 mb-4';
+                jobCard.innerHTML = `
+                    <div class="job-card card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">${job.position}</h5>
+                                <span class="ai-badge">${job.match}% Match</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">${job.company}</h6>
+                            <p class="card-text"><i class="fas fa-map-marker-alt me-1"></i> ${job.location}</p>
+                            <p class="card-text"><i class="fas fa-dollar-sign me-1"></i> ${job.salary}</p>
+                            <div class="mt-auto">
+                                <button class="btn btn-primary btn-sm" onclick="applyToJob(${job.id})">
+                                    <i class="fas fa-paper-plane me-1"></i> Apply Now
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm ms-1" onclick="saveJob(${job.id})">
+                                    <i class="fas fa-bookmark me-1"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                jobResults.appendChild(jobCard);
+            });
+        }
+        
+        function applyToJob(jobId) {
+            const job = sampleJobs.find(j => j.id === jobId);
+            if (job) {
+                if (confirm(`Apply to ${job.position} at ${job.company}? Our AI will customize your application.`)) {
+                    alert(`Application submitted to ${job.company}! AI has customized your resume and cover letter for this position.`);
+                    // In a real application, this would call the application service
+                }
+            }
+        }
+        
+        function saveJob(jobId) {
+            alert("Job saved to your favorites!");
+        }
+
+        // Applications functions
+        function loadApplications() {
+            const applicationsList = document.getElementById('applicationsList');
+            applicationsList.innerHTML = '';
+            
+            sampleApplications.forEach(app => {
+                const statusClass = `status-${app.status}`;
+                const statusText = app.status.charAt(0).toUpperCase() + app.status.slice(1);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${app.company}</td>
+                    <td>${app.position}</td>
+                    <td>${app.date}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar" role="progressbar" style="width: ${app.aiScore}%"></div>
+                        </div>
+                        <small>${app.aiScore}%</small>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewApplication(${app.id})">View</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="withdrawApplication(${app.id})">Withdraw</button>
+                    </td>
+                `;
+                applicationsList.appendChild(row);
+            });
+            
+            // Update application stats
+            document.getElementById('totalApplications').textContent = sampleApplications.length;
+            document.getElementById('pendingApplications').textContent = sampleApplications.filter(app => app.status === 'applied').length;
+            document.getElementById('interviewApplications').textContent = sampleApplications.filter(app => app.status === 'interview').length;
+            document.getElementById('rejectedApplications').textContent = sampleApplications.filter(app => app.status === 'rejected').length;
+        }
+        
+        function viewApplication(appId) {
+            const app = sampleApplications.find(a => a.id === appId);
+            if (app) {
+                alert(`Application Details:\nCompany: ${app.company}\nPosition: ${app.position}\nDate: ${app.date}\nStatus: ${app.status}\nAI Score: ${app.aiScore}%`);
+            }
+        }
+        
+        function withdrawApplication(appId) {
+            if (confirm("Are you sure you want to withdraw this application?")) {
+                alert("Application withdrawn successfully.");
+                // In a real application, this would update the backend
+            }
+        }
+        
+        function exportApplications() {
+            alert("Exporting applications to CSV...");
+            // In a real application, this would generate and download a CSV file
+        }
+
+        // AI Agents functions
+        function activateAllAgents() {
+            document.getElementById('researchAgent').checked = true;
+            document.getElementById('applicationAgent').checked = true;
+            document.getElementById('followupAgent').checked = true;
+            document.getElementById('interviewAgent').checked = true;
+            alert("All AI agents activated!");
+        }
+        
+        function testAgent(agentType) {
+            const agentNames = {
+                'research': 'Research Agent',
+                'application': 'Application Agent', 
+                'followup': 'Follow-up Agent',
+                'interview': 'Interview Prep Agent'
+            };
+            alert(`Testing ${agentNames[agentType]}...\nAgent is functioning correctly!`);
+        }
+
+        // Settings functions
+        function saveSettings() {
+            alert("Settings saved successfully!");
+        }
+        
+        function logout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>
