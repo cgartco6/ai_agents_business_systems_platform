@@ -50,3 +50,42 @@ cryptography>=41.0.0
 # Performance & Optimization
 numba>=0.58.0
 cython>=3.0.0
+# Web Scraping
+beautifulsoup4>=4.12.0
+aiohttp>=3.8.0
+requests>=2.31.0
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+lxml>=4.9.0
+pyquery>=2.0.0
+
+# Data Processing
+pandas>=2.1.0
+numpy>=1.24.0
+openpyxl>=3.1.0
+
+# Headless Browser
+pyppeteer>=1.0.0
+playwright>=1.40.0
+
+# Rate Limiting
+aiolimiter>=1.1.0
+ratelimit>=2.2.0
+
+# Proxy Support
+aiohttp-socks>=0.8.0
+fake-useragent>=1.1.0
+
+# Database
+sqlalchemy>=2.0.0
+alembic>=1.12.0
+dataset>=1.6.0
+
+# APIs
+alpha-vantage>=2.3.0
+yfinance>=0.2.0
+tweepy>=4.14.0
+
+# Monitoring
+prometheus-client>=0.17.0
+grafana-api>=1.0.0
